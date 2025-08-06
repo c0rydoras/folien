@@ -16,7 +16,7 @@ func collectH1s(slideContent []byte) []string {
 
 	var h1s []string
 
-	ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+	err := ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
 		if !entering {
 			return ast.WalkContinue, nil
 		}
@@ -29,6 +29,9 @@ func collectH1s(slideContent []byte) []string {
 		return ast.WalkContinue, nil
 	})
 
+	if err != nil {
+		return []string{}
+	}
 	return h1s
 }
 

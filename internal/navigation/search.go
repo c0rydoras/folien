@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/c0rydoras/slides/styles"
+	"github.com/charmbracelet/bubbles/textinput"
 )
 
 // Model is an interface for models.model, so that cycle imports are avoided

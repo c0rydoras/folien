@@ -16,7 +16,7 @@ func collectHeadings(slideContent []byte) map[int]string {
 
 	latestHeadings := make(map[int]string)
 
-	ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+	err := ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
 		if !entering {
 			return ast.WalkContinue, nil
 		}
@@ -28,7 +28,11 @@ func collectHeadings(slideContent []byte) map[int]string {
 		return ast.WalkContinue, nil
 	})
 
+	if err != nil {
+		return make(map[int]string)
+	}
 	return latestHeadings
+
 }
 
 func AddHeadings(slides []string, maxLevel int) []string {

@@ -143,10 +143,10 @@ var Languages = map[string]Language{
 	},
 	Scala: {
 		Extension: "sc",
-		Commands: cmds{{"scala-cli", "run", "<file>"}},
+		Commands:  cmds{{"scala-cli", "run", "<file>"}},
 	},
 	Haskell: {
 		Extension: "hs",
-		Commands: cmds{{"runghc", "<file>"}},
+		Commands:  cmds{{"runghc", "<file>"}},
 	},
 }
