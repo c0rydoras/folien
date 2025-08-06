@@ -1,6 +1,6 @@
 # Slides
 
-Slides in your terminal.
+Hacky fork of [maaslalani's `slides`](https://github.com/maaslalani/slides)
 
 <p align="center">
   <img src="./assets/slides-1.gif?raw=true" alt="Slides Presentation" />
@@ -234,7 +234,7 @@ Given the date _January 02, 2006_:
 
 ### Alternatives
 
-**Credits**: This project was heavily inspired by [`lookatme`](https://github.com/d0c-s4vage/lookatme).
+**Credits**: This project was forked from [`slides`](https://github.com/maaslalani/slides)
 
 - [`lookatme`](https://github.com/d0c-s4vage/lookatme)
 - [`sli.dev`](https://sli.dev/)
