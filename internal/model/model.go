@@ -48,8 +48,9 @@ type Model struct {
 	buffer   string
 	// VirtualText is used for additional information that is not part of the
 	// original slides, it will be displayed on a slide and reset on page change
-	VirtualText string
-	Search      navigation.Search
+	VirtualText  string
+	Search       navigation.Search
+	Preprocessor *preprocessor.Config
 }
 
 type fileWatchMsg struct{}
@@ -99,7 +100,12 @@ func (m *Model) Load() error {
 		slides = slides[1:]
 	}
 
-	m.Slides = preprocessor.AddHeadings(preprocessor.GenerateTOC(slides, "TOC"), 2)
+	m.Slides = slides
+
+	if m.Preprocessor != nil {
+		m.Slides = m.Preprocessor.Process(slides)
+	}
+
 	m.Author = metaData.Author
 	m.Date = metaData.Date
 	m.Paging = metaData.Paging

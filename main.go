@@ -7,11 +7,15 @@ import (
 
 	"github.com/c0rydoras/slides/internal/model"
 	"github.com/c0rydoras/slides/internal/navigation"
+	"github.com/c0rydoras/slides/internal/preprocessor"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
 
 var (
+	tocTitle       string
+	enableHeadings bool
+
 	cmd = &cobra.Command{
 		Use:   "slides <file.md>",
 		Short: "Terminal based presentation tool",
@@ -25,10 +29,11 @@ var (
 			}
 
 			presentation := model.Model{
-				Page:     0,
-				Date:     time.Now().Format("2006-01-02"),
-				FileName: fileName,
-				Search:   navigation.NewSearch(),
+				Page:         0,
+				Date:         time.Now().Format("2006-01-02"),
+				FileName:     fileName,
+				Search:       navigation.NewSearch(),
+				Preprocessor: preprocessor.NewConfig().WithTOC(tocTitle).WithHeadings(),
 			}
 			err = presentation.Load()
 			if err != nil {
@@ -43,6 +48,12 @@ var (
 )
 
 func main() {
+	cmd.Flags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
+
+	cmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
+	tocFlag := cmd.Flag("toc")
+	tocFlag.NoOptDefVal = "Table of Contents"
+
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
