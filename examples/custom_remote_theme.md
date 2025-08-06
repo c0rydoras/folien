@@ -1,7 +1,7 @@
 ---
-theme: https://github.com/c0rydoras/slides/raw/main/styles/theme.json
+theme: https://github.com/c0rydoras/folien/raw/main/styles/theme.json
 ---
 
-# Slides
+# Folien
 
-The theme of this slide is fetched from https://github.com/c0rydoras/slides/raw/main/styles/theme.json, the title above should be green.
+The theme of this slide is fetched from https://github.com/c0rydoras/folien/raw/main/styles/theme.json, the title above should be green.

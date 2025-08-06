@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/c0rydoras/slides/internal/file"
+	"github.com/c0rydoras/folien/internal/file"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,7 +44,7 @@ func TestIsExecutable(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(fmt.Sprint(tc.perm), func(t *testing.T) {
-			tmp, err := os.CreateTemp(os.TempDir(), "slides-*")
+			tmp, err := os.CreateTemp(os.TempDir(), "folien-*")
 			if err != nil {
 				t.Fatal("failed to create temp file")
 			}

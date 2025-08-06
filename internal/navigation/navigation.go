@@ -6,7 +6,7 @@ import (
 
 type repeatableFunc func(slide, totalSlides int) int
 
-// State tracks the current buffer, page, and total number of slides
+// State tracks the current buffer, page, and total number of folien
 type State struct {
 	Buffer      string
 	Page        int

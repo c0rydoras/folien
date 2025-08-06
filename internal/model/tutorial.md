@@ -16,8 +16,8 @@ package main
 import "fmt"
 
 func main() {
-  // You can show code in slides
-  // Press ctrl+e to execute this code directly in slides
+  // You can show code in folien
+  // Press ctrl+e to execute this code directly in folien
   fmt.Println("Tada!")
 }
 ```
@@ -63,7 +63,7 @@ digraph {
 ```
 ---
 
-All you need to do is separate slides with triple dashes
+All you need to do is separate folien with triple dashes
 `---` on a separate line, like so:
 
 ```markdown

@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/c0rydoras/slides/styles"
+	"github.com/c0rydoras/folien/styles"
 	"github.com/charmbracelet/bubbles/textinput"
 )
 

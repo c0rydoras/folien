@@ -1,4 +1,4 @@
-// Package styles implements the theming logic for slides
+// Package styles implements the theming logic for folien
 package styles
 
 import (

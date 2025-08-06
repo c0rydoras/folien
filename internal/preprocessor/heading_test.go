@@ -64,7 +64,7 @@ func TestCollectHeadings(t *testing.T) {
 }
 
 func TestAddHeadings(t *testing.T) {
-	slides := []string{
+	folien := []string{
 		"# Slide 1\nContent of slide 1",
 		"## Slide 2\nContent of slide 2",
 		"Content of slide 3",
@@ -80,7 +80,7 @@ func TestAddHeadings(t *testing.T) {
 		"# Slide 4\n## Slide 5\ncontent of slide 5",
 	}
 
-	result := AddHeadings(slides, 2)
+	result := AddHeadings(folien, 2)
 
 	if !reflect.DeepEqual(result, expected) {
 		t.Errorf("AddHeadings() = %v, want %v", result, expected)

@@ -35,16 +35,16 @@ func collectHeadings(slideContent []byte) map[int]string {
 
 }
 
-func AddHeadings(slides []string, maxLevel int) []string {
-	if len(slides) == 0 {
-		return slides
+func AddHeadings(folien []string, maxLevel int) []string {
+	if len(folien) == 0 {
+		return folien
 	}
 
 	var newSlides []string
 
 	acc := make(map[int]string)
 
-	for _, slideContent := range slides {
+	for _, slideContent := range folien {
 		currentHeadings := collectHeadings([]byte(slideContent))
 
 		headingsToAdd := make(map[int]string)

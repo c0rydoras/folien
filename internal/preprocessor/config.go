@@ -25,15 +25,15 @@ func (c *Config) WithHeadings() *Config {
 	return c
 }
 
-func (c *Config) Process(slides []string) []string {
-	result := slides
+func (c *Config) Process(folien []string) []string {
+	result := folien
 
 	if c.EnableHeadings {
 		result = AddHeadings(result, 2)
 	}
 
 	if c.TOCTitle != "" {
-		result = append([]string{GenerateTOC(slides, c.TOCTitle, c.TOCDescription)}, result...)
+		result = append([]string{GenerateTOC(folien, c.TOCTitle, c.TOCDescription)}, result...)
 	}
 
 	return result

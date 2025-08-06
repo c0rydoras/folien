@@ -1,28 +1,28 @@
 # Code blocks
 
-Slides allows you to execute code blocks directly inside your slides!
+Folien allows you to execute code blocks directly inside your folien!
 
-Just press `ctrl+e` and the result of the code block will be displayed as virtual text in your slides.
+Just press `ctrl+e` and the result of the code block will be displayed as virtual text in your folien.
 
 Currently supported languages:
 
 <!-- Use comments in your markdown! -->
 
-* `bash`
-* `zsh`
-* `fish`
-* `elixir`
-* `go`
-* `javascript`
-* `python`
-* `ruby`
-* `perl`
-* `rust`
-* `java`
-* `cpp`
-* `swift`
-* `dart`
-* `v`
+- `bash`
+- `zsh`
+- `fish`
+- `elixir`
+- `go`
+- `javascript`
+- `python`
+- `ruby`
+- `perl`
+- `rust`
+- `java`
+- `cpp`
+- `swift`
+- `dart`
+- `v`
 <!-- * `secret` -->
 
 ---
@@ -84,7 +84,7 @@ fmt.Println("Hello, world!")
 ### Javascript
 
 ```javascript
-console.log("Hello, world!")
+console.log("Hello, world!");
 ```
 
 ---
@@ -132,6 +132,7 @@ fn main() {
 ---
 
 ### Java
+
 ```java
 public class Main {
     public static void main(String[] args) {
@@ -143,6 +144,7 @@ public class Main {
 ---
 
 ### Julia
+
 ```julia
 println("Hello, world!")
 ```
@@ -150,6 +152,7 @@ println("Hello, world!")
 ---
 
 ### C++
+
 ```cpp
 #include <iostream>
 
@@ -162,6 +165,7 @@ int main() {
 ---
 
 ### Swift
+
 ```swift
 print("Hello, world!")
 ```
@@ -169,6 +173,7 @@ print("Hello, world!")
 ---
 
 ### Dart
+
 ```dart
 void main() {
   print("Hello, world!");

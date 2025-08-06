@@ -1,5 +1,5 @@
 // Package meta implements markdown frontmatter parsing for simple
-// slides configuration
+// folien configuration
 package meta
 
 import (
@@ -31,12 +31,12 @@ type Meta struct {
 }
 
 // New creates a new instance of the
-// slideshow meta header object
+// folienhow meta header object
 func New() *Meta {
 	return &Meta{}
 }
 
-// Parse parses metadata from a slideshows header slide
+// Parse parses metadata from a folienhows header slide
 // including theme information
 //
 // If no front matter is provided, it will fallback to the default theme and

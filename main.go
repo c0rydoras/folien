@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/c0rydoras/slides/internal/model"
-	"github.com/c0rydoras/slides/internal/navigation"
-	"github.com/c0rydoras/slides/internal/preprocessor"
+	"github.com/c0rydoras/folien/internal/model"
+	"github.com/c0rydoras/folien/internal/navigation"
+	"github.com/c0rydoras/folien/internal/preprocessor"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
@@ -18,7 +18,7 @@ var (
 	enableHeadings bool
 
 	cmd = &cobra.Command{
-		Use:   "slides <file.md>",
+		Use:   "folien <file.md>",
 		Short: "Terminal based presentation tool",
 		Args:  cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {

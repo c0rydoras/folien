@@ -1,4 +1,4 @@
-# Slides
+# Folien
 
 Hacky fork of [maaslalani's `slides`](https://github.com/maaslalani/slides)
 
@@ -11,27 +11,27 @@ Hacky fork of [maaslalani's `slides`](https://github.com/maaslalani/slides)
 #### Go
 
 ```
-go install github.com/c0rydoras/slides@latest
+go install github.com/c0rydoras/folien@latest
 ```
 
 From source:
 
 ```
-git clone https://github.com/c0rydoras/slides.git
-cd slides
+git clone https://github.com/c0rydoras/folien.git
+cd folien
 go install
 ```
 
-You can also download a binary from the [releases](https://github.com/c0rydoras/slides/releases) page.
+You can also download a binary from the [releases](https://github.com/c0rydoras/folien/releases) page.
 
 </details>
 
 ### Usage
 
-Create a simple markdown file that contains your slides:
+Create a simple markdown file that contains your folien:
 
 ````markdown
-# Welcome to Slides
+# Welcome to Folien
 
 A terminal based presentation tool
 
@@ -45,7 +45,7 @@ In fact, this entire presentation is a markdown file.
 
 ## Everything happens in your terminal
 
-Create slides and present them without ever leaving your terminal.
+Create folien and present them without ever leaving your terminal.
 
 ---
 
@@ -57,19 +57,19 @@ package main
 import "fmt"
 
 func main() {
-  fmt.Println("Execute code directly inside the slides")
+  fmt.Println("Execute code directly inside the folien")
 }
 ```
 
-You can execute code inside your slides by pressing `<C-e>`,
+You can execute code inside your folien by pressing `<C-e>`,
 the output of your command will be displayed at the end of the current slide.
 
 ---
 
-## Pre-process slides
+## Pre-process folien
 
 You can add a code block with three tildes (`~`) and write a command to run _before_ displaying
-the slides, the text inside the code block will be passed as `stdin` to the command
+the folien, the text inside the code block will be passed as `stdin` to the command
 and the code block will be replaced with the `stdout` of the command.
 
 ```
@@ -85,27 +85,27 @@ The above will be pre-processed to look like:
 └───┘       └───┘
 
 For security reasons, you must pass a file that has execution permissions
-for the slides to be pre-processed. You can use `chmod` to add these permissions.
+for the folien to be pre-processed. You can use `chmod` to add these permissions.
 
 ```bash
 chmod +x file.md
 ```
 ````
 
-Checkout the [example slides](https://github.com/c0rydoras/slides/tree/main/examples).
+Checkout the [example folien](https://github.com/c0rydoras/folien/tree/main/examples).
 
 Then, to present, run:
 
 ```
-slides presentation.md
+folien presentation.md
 ```
 
-If given a file name, `slides` will automatically look for changes in the file and update the presentation live.
+If given a file name, `folien` will automatically look for changes in the file and update the presentation live.
 
-`slides` also accepts input through `stdin`:
+`folien` also accepts input through `stdin`:
 
 ```
-curl http://example.com/slides.md | slides
+curl http://example.com/folien.md | folien
 ```
 
 Go to the first slide with the following key sequence:
@@ -154,7 +154,7 @@ Press <kbd>ctrl+n</kbd> after a search to go to the next search result.
 
 ### Code Execution
 
-If slides finds a code block on the current slides it can execute the code block and display the result as virtual text
+If folien finds a code block on the current folien it can execute the code block and display the result as virtual text
 on the screen.
 
 Press <kbd>ctrl+e</kbd> on a slide with a code block to execute it and display the result.
@@ -184,7 +184,7 @@ The above will be pre-processed to look like:
 ```
 
 For security reasons, you must pass a file that has execution permissions
-for the slides to be pre-processed. You can use `chmod` to add these permissions.
+for the folien to be pre-processed. You can use `chmod` to add these permissions.
 
 ```bash
 chmod +x file.md
@@ -192,9 +192,9 @@ chmod +x file.md
 
 ### Configuration
 
-`slides` allows you to customize your presentation's look and feel with metadata at the top of your `slides.md`.
+`folien` allows you to customize your presentation's look and feel with metadata at the top of your `folien.md`.
 
-> This section is entirely optional, `slides` will use sensible defaults if this section or any field in the section is omitted.
+> This section is entirely optional, `folien` will use sensible defaults if this section or any field in the section is omitted.
 
 ```yaml
 ---
@@ -207,14 +207,14 @@ paging: Slide %d / %d
 
 - `theme`: Path to `json` file containing a [glamour
   theme](https://github.com/charmbracelet/glamour/tree/master/styles), can also
-  be a link to a remote `json` file which slides will fetch before presenting.
+  be a link to a remote `json` file which folien will fetch before presenting.
 - `author`: A `string` to display on the bottom-left corner of the presentation
   view. Defaults to the OS current user's full name. Can be empty to hide the author.
 - `date`: A `string` that is used to format today's date in the `YYYY-MM-DD` format. If the date is not a valid
   format, the string will be displayed. Defaults to `YYYY-MM-DD`.
 - `paging`: A `string` that contains 0 or more `%d` directives. The first `%d`
   will be replaced with the current slide number and the second `%d` will be
-  replaced with the total slides count. Defaults to `Slide %d / %d`.
+  replaced with the total folien count. Defaults to `Slide %d / %d`.
   You will need to surround the paging value with quotes if it starts with `%`.
 
 #### Date format

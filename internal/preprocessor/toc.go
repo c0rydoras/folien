@@ -35,20 +35,20 @@ func collectH1s(slideContent []byte) []string {
 	return h1s
 }
 
-func GenerateTOC(slides []string, title string, description string) string {
+func GenerateTOC(folien []string, title string, description string) string {
 	var toc strings.Builder
 	toc.WriteString(fmt.Sprintf("# %s\n\n", title))
 	if description != "" {
 		toc.WriteString(fmt.Sprintf("%s\n\n", description))
 	}
 
-	var headings = collectH1s([]byte(strings.Join(slides, "\n")))
+	var headings = collectH1s([]byte(strings.Join(folien, "\n")))
 
 	for _, text := range headings {
 		toc.WriteString(fmt.Sprintf("- %s\n", text))
 	}
 
-	if len(slides) == 0 {
+	if len(folien) == 0 {
 		return ""
 	}
 	return toc.String()

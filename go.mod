@@ -1,4 +1,4 @@
-module github.com/c0rydoras/slides
+module github.com/c0rydoras/folien
 
 go 1.23.0
 

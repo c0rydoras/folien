@@ -6,7 +6,7 @@ paging: Page %d of %d
 
 # Metadata Example
 
-Customize the bottom information bar by adding metadata to your `slides.md` file.
+Customize the bottom information bar by adding metadata to your `folien.md` file.
 
 ```
 --- 

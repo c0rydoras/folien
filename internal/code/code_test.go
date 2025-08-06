@@ -3,7 +3,7 @@ package code_test
 import (
 	"testing"
 
-	"github.com/c0rydoras/slides/internal/code"
+	"github.com/c0rydoras/folien/internal/code"
 )
 
 func TestParse(t *testing.T) {

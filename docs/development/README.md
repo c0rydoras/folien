@@ -6,7 +6,7 @@ Make changes, and test them by running:
 make
 ```
 
-This will run `go run main.go examples/slides.md`, you can then ensure
+This will run `go run main.go examples/folien.md`, you can then ensure
 everything still works.
 
 If you're adding a feature that requires a specific piece of markdown, you can
@@ -21,7 +21,7 @@ make test
 ### Breaking Changes
 
 Most changes should be entirely backwards compatible.
-Ensure that `slides examples/slides.md` still works.
+Ensure that `folien examples/folien.md` still works.
 
 ### Codebase
 

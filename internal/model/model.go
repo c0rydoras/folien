@@ -11,14 +11,14 @@ import (
 	"time"
 
 	"github.com/atotto/clipboard"
-	"github.com/c0rydoras/slides/internal/file"
-	"github.com/c0rydoras/slides/internal/navigation"
-	"github.com/c0rydoras/slides/internal/preprocessor"
-	"github.com/c0rydoras/slides/internal/process"
+	"github.com/c0rydoras/folien/internal/file"
+	"github.com/c0rydoras/folien/internal/navigation"
+	"github.com/c0rydoras/folien/internal/preprocessor"
+	"github.com/c0rydoras/folien/internal/process"
 
-	"github.com/c0rydoras/slides/internal/code"
-	"github.com/c0rydoras/slides/internal/meta"
-	"github.com/c0rydoras/slides/styles"
+	"github.com/c0rydoras/folien/internal/code"
+	"github.com/c0rydoras/folien/internal/meta"
+	"github.com/c0rydoras/folien/styles"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/glamour"
@@ -26,7 +26,7 @@ import (
 
 var (
 	//go:embed tutorial.md
-	slidesTutorial []byte
+	folienTutorial []byte
 	tabSpaces      = strings.Repeat(" ", 4)
 )
 
@@ -35,7 +35,7 @@ const (
 )
 
 // Model represents the model of this presentation, which contains all the
-// state related to the current slides.
+// state related to the current folien.
 type Model struct {
 	Slides   []string
 	Page     int
@@ -47,7 +47,7 @@ type Model struct {
 	viewport viewport.Model
 	buffer   string
 	// VirtualText is used for additional information that is not part of the
-	// original slides, it will be displayed on a slide and reset on page change
+	// original folien, it will be displayed on a slide and reset on page change
 	VirtualText  string
 	Search       navigation.Search
 	Preprocessor *preprocessor.Config
@@ -57,7 +57,7 @@ type fileWatchMsg struct{}
 
 var fileInfo os.FileInfo
 
-// Init initializes the model and begins watching the slides file for changes
+// Init initializes the model and begins watching the folien file for changes
 // if it exists.
 func (m Model) Init() tea.Cmd {
 	if m.FileName == "" {
@@ -91,19 +91,19 @@ func (m *Model) Load() error {
 	content = strings.ReplaceAll(content, "\r", "")
 
 	content = strings.TrimPrefix(content, strings.TrimPrefix(delimiter, "\n"))
-	slides := strings.Split(content, delimiter)
+	folien := strings.Split(content, delimiter)
 
-	metaData, exists := meta.New().Parse(slides[0])
+	metaData, exists := meta.New().Parse(folien[0])
 	// If the user specifies a custom configuration options
 	// skip the first "slide" since this is all configuration
-	if exists && len(slides) > 1 {
-		slides = slides[1:]
+	if exists && len(folien) > 1 {
+		folien = folien[1:]
 	}
 
-	m.Slides = slides
+	m.Slides = folien
 
 	if m.Preprocessor != nil {
-		m.Slides = m.Preprocessor.Process(slides)
+		m.Slides = m.Preprocessor.Process(folien)
 	}
 
 	m.Author = metaData.Author
@@ -261,8 +261,8 @@ func readFile(path string) (string, error) {
 	}
 	content := string(b)
 
-	// Pre-process slides if the file is executable to avoid
-	// unintentional code execution when presenting slides
+	// Pre-process folien if the file is executable to avoid
+	// unintentional code execution when presenting folien
 	if file.IsExecutable(s) {
 		// Remove shebang if file has one
 		if strings.HasPrefix(content, "#!") {
@@ -282,7 +282,7 @@ func readStdin() (string, error) {
 	}
 
 	if stat.Mode()&os.ModeNamedPipe == 0 && stat.Size() == 0 {
-		return string(slidesTutorial), nil
+		return string(folienTutorial), nil
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -317,7 +317,7 @@ func (m *Model) SetPage(page int) {
 	m.Page = page
 }
 
-// Pages returns all the slides in the presentation.
+// Pages returns all the folien in the presentation.
 func (m *Model) Pages() []string {
 	return m.Slides
 }

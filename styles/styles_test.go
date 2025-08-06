@@ -3,7 +3,7 @@ package styles_test
 import (
 	"testing"
 
-	"github.com/c0rydoras/slides/styles"
+	"github.com/c0rydoras/folien/styles"
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/glamour/ansi"
 	gstyles "github.com/charmbracelet/glamour/styles"

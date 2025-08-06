@@ -1,7 +1,7 @@
-# Slides
+# Folien
 
 You can add a code block with three tildes (~) and write a command to run before displaying
-the slides, the text inside the code block will be passed as stdin to the command
+the folien, the text inside the code block will be passed as stdin to the command
 and the code block will be replaced with the stdout of the command.
 
 ```
@@ -21,7 +21,7 @@ NOTE: You need `graph-easy` installed and in your `$PATH`
 ```
 
 For security reasons, you must pass a file that has execution permissions
-for the slides to be pre-processed.
+for the folien to be pre-processed.
 
 ```
 chmod +x file.md
@@ -29,30 +29,28 @@ chmod +x file.md
 
 ---
 
-~~~sd replaced processed
+```sd replaced processed
 This content will be passed in as stdin and will be replaced.
-~~~
+```
 
 ---
-
 
 Any command will work
 
-~~~echo "You can do whatever, really"
+```echo "You can do whatever, really"
 This doesn't matter, since it will be replaced by the stdout
 of the command above because the command will disregard stdin.
-~~~
----
+```
 
+---
 
 You can use this to import snippets of code from other files:
 
-~~~xargs cat
+```xargs cat
 examples/import.md
-~~~
+```
 
 ---
-
 
 ## More pre-process examples:
 
@@ -80,3 +78,4 @@ NOTE: You need `plantuml` installed and in your `$PATH`
 │A│          │B│
 └─┘          └─┘
 
+```

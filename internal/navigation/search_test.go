@@ -5,7 +5,7 @@ import (
 )
 
 type mockModel struct {
-	slides []string
+	folien []string
 	page   int
 }
 
@@ -18,7 +18,7 @@ func (m *mockModel) SetPage(page int) {
 }
 
 func (m *mockModel) Pages() []string {
-	return m.slides
+	return m.folien
 }
 
 func TestSearch(t *testing.T) {
@@ -55,7 +55,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	m := &mockModel{
-		slides: data,
+		folien: data,
 		page:   0,
 	}
 
