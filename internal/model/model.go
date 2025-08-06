@@ -16,12 +16,12 @@ import (
 	"github.com/c0rydoras/slides/internal/preprocessor"
 	"github.com/c0rydoras/slides/internal/process"
 
-	"github.com/charmbracelet/bubbles/viewport"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/glamour"
 	"github.com/c0rydoras/slides/internal/code"
 	"github.com/c0rydoras/slides/internal/meta"
 	"github.com/c0rydoras/slides/styles"
+	"github.com/charmbracelet/bubbles/viewport"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/glamour"
 )
 
 var (
@@ -99,7 +99,7 @@ func (m *Model) Load() error {
 		slides = slides[1:]
 	}
 
-	m.Slides = preprocessor.AddHeadings(slides, 2)
+	m.Slides = preprocessor.AddHeadings(preprocessor.GenerateTOC(slides, "TOC"), 2)
 	m.Author = metaData.Author
 	m.Date = metaData.Date
 	m.Paging = metaData.Paging
