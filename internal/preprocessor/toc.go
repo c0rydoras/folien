@@ -32,9 +32,12 @@ func collectH1s(slideContent []byte) []string {
 	return h1s
 }
 
-func GenerateTOC(slides []string, title string) string {
+func GenerateTOC(slides []string, title string, description string) string {
 	var toc strings.Builder
 	toc.WriteString(fmt.Sprintf("# %s\n\n", title))
+	if description != "" {
+		toc.WriteString(fmt.Sprintf("%s\n\n", description))
+	}
 
 	var headings = collectH1s([]byte(strings.Join(slides, "\n")))
 

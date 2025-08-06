@@ -14,6 +14,7 @@ import (
 
 var (
 	tocTitle       string
+	tocDescription string
 	enableHeadings bool
 
 	cmd = &cobra.Command{
@@ -33,7 +34,7 @@ var (
 				Date:         time.Now().Format("2006-01-02"),
 				FileName:     fileName,
 				Search:       navigation.NewSearch(),
-				Preprocessor: preprocessor.NewConfig().WithTOC(tocTitle).WithHeadings(),
+				Preprocessor: preprocessor.NewConfig().WithTOC(tocTitle, tocDescription).WithHeadings(),
 			}
 			err = presentation.Load()
 			if err != nil {
@@ -53,6 +54,10 @@ func main() {
 	cmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
 	tocFlag := cmd.Flag("toc")
 	tocFlag.NoOptDefVal = "Table of Contents"
+
+	cmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
+	tocDescFlag := cmd.Flag("toc-description")
+	tocDescFlag.NoOptDefVal = "Table of Contents Description"
 
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
