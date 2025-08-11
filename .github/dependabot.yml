@@ -1,6 +1,16 @@
+---
 version: 2
 updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: "Europe/Zurich"
+
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: daily
+      time: "04:00"
+      timezone: "Europe/Zurich"
