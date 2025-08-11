@@ -11,10 +11,8 @@ import (
 	"time"
 
 	"github.com/atotto/clipboard"
-	"github.com/c0rydoras/folien/internal/file"
 	"github.com/c0rydoras/folien/internal/navigation"
 	"github.com/c0rydoras/folien/internal/preprocessor"
-	"github.com/c0rydoras/folien/internal/process"
 
 	"github.com/c0rydoras/folien/internal/code"
 	"github.com/c0rydoras/folien/internal/meta"
@@ -259,20 +257,8 @@ func readFile(path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	content := string(b)
 
-	// Pre-process folien if the file is executable to avoid
-	// unintentional code execution when presenting folien
-	if file.IsExecutable(s) {
-		// Remove shebang if file has one
-		if strings.HasPrefix(content, "#!") {
-			content = strings.Join(strings.SplitN(content, "\n", 2)[1:], "\n")
-		}
-
-		content = process.Pre(content)
-	}
-
-	return content, err
+	return string(b), err
 }
 
 func readStdin() (string, error) {
