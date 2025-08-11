@@ -31,12 +31,12 @@ type Meta struct {
 }
 
 // New creates a new instance of the
-// folienhow meta header object
+// slideshow meta header object
 func New() *Meta {
 	return &Meta{}
 }
 
-// Parse parses metadata from a folienhows header slide
+// Parse parses metadata from a slideshows header slide
 // including theme information
 //
 // If no front matter is provided, it will fallback to the default theme and

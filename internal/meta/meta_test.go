@@ -16,12 +16,12 @@ func TestMeta_ParseHeader(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		folienhow string
+		slideshow string
 		want      *meta.Meta
 	}{
 		{
 			name:      "Parse theme from header",
-			folienhow: fmt.Sprintf("---\ntheme: %q\n", "dark"),
+			slideshow: fmt.Sprintf("---\ntheme: %q\n", "dark"),
 			want: &meta.Meta{
 				Theme:  "dark",
 				Author: user.Name,
@@ -31,7 +31,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Fallback to default if no theme provided",
-			folienhow: "\n# Header Slide\n > Subtitle\n",
+			slideshow: "\n# Header Slide\n > Subtitle\n",
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -41,7 +41,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse author from header",
-			folienhow: fmt.Sprintf("---\nauthor: %q\n", "gopher"),
+			slideshow: fmt.Sprintf("---\nauthor: %q\n", "gopher"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: "gopher",
@@ -51,7 +51,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Fallback to default if no author provided",
-			folienhow: "\n# Header Slide\n > Subtitle\n",
+			slideshow: "\n# Header Slide\n > Subtitle\n",
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -61,7 +61,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse static date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "31/01/1970"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "31/01/1970"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -71,7 +71,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse go-styled date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "MMM dd, YYYY"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "MMM dd, YYYY"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -81,7 +81,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse YYYY-MM-DD date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "YYYY-MM-DD"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "YYYY-MM-DD"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -91,7 +91,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse dd/mm/YY date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "dd/mm/YY"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "dd/mm/YY"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -101,7 +101,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse MMM dd, YYYY date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "MMM dd, YYYY"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "MMM dd, YYYY"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -111,7 +111,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse MMMM DD, YYYY date from header",
-			folienhow: fmt.Sprintf("---\ndate: %q\n", "MMMM DD, YYYY"),
+			slideshow: fmt.Sprintf("---\ndate: %q\n", "MMMM DD, YYYY"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -121,7 +121,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Fallback to default if no date provided",
-			folienhow: "\n# Header Slide\n > Subtitle\n",
+			slideshow: "\n# Header Slide\n > Subtitle\n",
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -131,7 +131,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Parse paging from header",
-			folienhow: fmt.Sprintf("---\npaging: %q\n", "%d of %d"),
+			slideshow: fmt.Sprintf("---\npaging: %q\n", "%d of %d"),
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -141,7 +141,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Fallback to default if no numebring provided",
-			folienhow: "\n# Header Slide\n > Subtitle\n",
+			slideshow: "\n# Header Slide\n > Subtitle\n",
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -151,7 +151,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 		},
 		{
 			name:      "Fallback if first slide is valid yaml",
-			folienhow: "---\n# Header Slide---\nContent\n",
+			slideshow: "---\n# Header Slide---\nContent\n",
 			want: &meta.Meta{
 				Theme:  "default",
 				Author: user.Name,
@@ -163,7 +163,7 @@ func TestMeta_ParseHeader(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			m := &meta.Meta{}
-			got, hasMeta := m.Parse(tt.folienhow)
+			got, hasMeta := m.Parse(tt.slideshow)
 			if !hasMeta {
 				assert.NotNil(t, got)
 			}
