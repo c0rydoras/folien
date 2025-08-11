@@ -5,9 +5,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"time"
+
+	"github.com/c0rydoras/folien/pkg/parser"
 )
 
 // Block represents a code block.
@@ -23,9 +24,6 @@ type Result struct {
 	ExecutionTime time.Duration
 }
 
-// ?: means non-capture group
-var re = regexp.MustCompile("(?s)(?:```|~~~)(\\w+)\n(.*?)\n(?:```|~~~)\\s?")
-
 var (
 	// ErrParse is the returned error when we cannot parse the code block (i.e.
 	// there is no code block on the current slide) or the code block is
@@ -36,20 +34,15 @@ var (
 // Parse takes a block of markdown and returns an array of Block's with code
 // and associated languages
 func Parse(markdown string) ([]Block, error) {
-	matches := re.FindAllStringSubmatch(markdown, -1)
+	codeBlocks := parser.CollectCodeBlocks([]byte(markdown))
 
 	var rv []Block
-	for _, match := range matches {
-		// There was either no language specified or no code block
-		// Either way, we cannot execute the expression
-		if len(match) < 3 {
-			continue
-		}
-		rv = append(rv, Block{
-			Language: match[1],
-			Code:     RemoveComments(match[2]),
-		})
 
+	for _, block := range codeBlocks {
+		rv = append(rv, Block{
+			Language: string(block.Language([]byte(markdown))),
+			Code:     string(block.Lines().Value([]byte(markdown))),
+		})
 	}
 
 	if len(rv) == 0 {

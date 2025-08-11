@@ -21,7 +21,7 @@ puts "Hello, world!"
 `,
 			expected: []code.Block{
 				{
-					Code:     `puts "Hello, world!"`,
+					Code:     `puts "Hello, world!"` + "\n",
 					Language: "ruby",
 				},
 			},
@@ -34,7 +34,7 @@ fmt.Println("Hello, world!")
 `,
 			expected: []code.Block{
 				{
-					Code:     `fmt.Println("Hello, world!")`,
+					Code:     `fmt.Println("Hello, world!")` + "\n",
 					Language: "go",
 				},
 			},
@@ -46,7 +46,7 @@ print("Hello, world!")
 ~~~`,
 			expected: []code.Block{
 				{
-					Code:     `print("Hello, world!")`,
+					Code:     `print("Hello, world!")` + "\n",
 					Language: "python",
 				},
 			},
@@ -75,7 +75,8 @@ import "fmt"
 
 func main() {
   fmt.Println("Written in Go!")
-}`,
+}
+`,
 					Language: "go",
 				},
 			},
@@ -103,11 +104,11 @@ fmt.Println("Hello, world!")
 `,
 			expected: []code.Block{
 				{
-					Code:     `puts "Hello, world!"`,
+					Code:     `puts "Hello, world!"` + "\n",
 					Language: "ruby",
 				},
 				{
-					Code:     `fmt.Println("Hello, world!")`,
+					Code:     `fmt.Println("Hello, world!")` + "\n",
 					Language: "go",
 				},
 			},
@@ -122,8 +123,8 @@ fmt.Println("Hello, world!")
 		for i, block := range blocks {
 			expected := tc.expected[i]
 			if block.Code != expected.Code {
-				t.Log(block.Code)
-				t.Log(expected.Code)
+				t.Logf("%#v\n", block.Code)
+				t.Logf("%#v\n", expected.Code)
 				t.Fatal("parse failed: incorrect code")
 			}
 			if block.Language != expected.Language {
