@@ -8,26 +8,16 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/yaml.v2"
+	"github.com/c0rydoras/folien/pkg/parser"
 )
-
-// Temporary structure to differentiate values not present in the YAML header
-// from values set to empty strings in the YAML header. We replace values not
-// set by defaults values when parsing a header.
-type parsedMeta struct {
-	Theme  *string `yaml:"theme"`
-	Author *string `yaml:"author"`
-	Date   *string `yaml:"date"`
-	Paging *string `yaml:"paging"`
-}
 
 // Meta contains all of the data to be parsed
 // out of a markdown file's header section
 type Meta struct {
-	Theme  string
-	Author string
-	Date   string
-	Paging string
+	Theme  string `yaml:"theme"`
+	Author string `yaml:"author"`
+	Date   string `yaml:"date"`
+	Paging string `yaml:"paging"`
 }
 
 // New creates a new instance of the
@@ -49,28 +39,32 @@ func (m *Meta) Parse(header string) (*Meta, bool) {
 		Paging: defaultPaging(),
 	}
 
-	var tmp parsedMeta
-	err := yaml.Unmarshal([]byte(header), &tmp)
+	tmp, err := parser.UnmarshalFrontMatter[Meta]([]byte(header))
 	if err != nil {
 		return fallback, false
 	}
 
-	if tmp.Theme != nil {
-		m.Theme = *tmp.Theme
+	// If all fields are empty, assume no frontmatter was found
+	if tmp.Theme == "" && tmp.Author == "" && tmp.Date == "" && tmp.Paging == "" {
+		return fallback, false
+	}
+
+	if tmp.Theme != "" {
+		m.Theme = tmp.Theme
 	} else {
 		m.Theme = fallback.Theme
 	}
 
-	if tmp.Author != nil {
-		m.Author = *tmp.Author
+	if tmp.Author != "" {
+		m.Author = tmp.Author
 	} else {
 		m.Author = fallback.Author
 	}
 
-	if tmp.Date != nil {
-		parsedDate := parseDate(*tmp.Date)
-		if parsedDate == *tmp.Date {
-			m.Date = *tmp.Date
+	if tmp.Date != "" {
+		parsedDate := parseDate(tmp.Date)
+		if parsedDate == tmp.Date {
+			m.Date = tmp.Date
 		} else {
 			m.Date = time.Now().Format(parsedDate)
 		}
@@ -78,8 +72,8 @@ func (m *Meta) Parse(header string) (*Meta, bool) {
 		m.Date = fallback.Date
 	}
 
-	if tmp.Paging != nil {
-		m.Paging = *tmp.Paging
+	if tmp.Paging != "" {
+		m.Paging = tmp.Paging
 	} else {
 		m.Paging = fallback.Paging
 	}
