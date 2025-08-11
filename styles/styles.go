@@ -3,6 +3,7 @@ package styles
 
 import (
 	_ "embed"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -77,14 +78,22 @@ func SelectTheme(theme string) glamour.TermRendererOption {
 			if err != nil {
 				return getDefaultTheme()
 			}
-			defer resp.Body.Close()
+			defer func() {
+				if cerr := resp.Body.Close(); cerr != nil {
+					fmt.Println("close error:", cerr)
+				}
+			}()
 			themeReader = resp.Body
 		} else {
 			file, err := os.Open(theme)
 			if err != nil {
 				return getDefaultTheme()
 			}
-			defer file.Close()
+			defer func() {
+				if cerr := file.Close(); cerr != nil {
+					fmt.Println("close error:", cerr)
+				}
+			}()
 			themeReader = file
 		}
 		bytes, err := io.ReadAll(themeReader)

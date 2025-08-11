@@ -28,7 +28,7 @@ var (
 	// ErrParse is the returned error when we cannot parse the code block (i.e.
 	// there is no code block on the current slide) or the code block is
 	// incorrectly written.
-	ErrParse = errors.New("Error: could not parse code block")
+	ErrParse = errors.New("error: could not parse code block")
 )
 
 // Parse takes a block of markdown and returns an array of Block's with code
@@ -78,8 +78,16 @@ func Execute(code Block) Result {
 		}
 	}
 
-	defer f.Close()
-	defer os.Remove(f.Name())
+	defer func() {
+		if err := f.Close(); err != nil {
+			_ = err // ignore error
+		}
+	}()
+	defer func() {
+		if err := os.Remove(f.Name()); err != nil {
+			_ = err // ignore error
+		}
+	}()
 
 	_, err = f.WriteString(TransformCode(code.Language, code.Code))
 	if err != nil {
