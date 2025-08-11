@@ -38,3 +38,18 @@ func TestUnmarshalFrontMatter_NoFrontMatter(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TestConfig{}, result)
 }
+
+func TestUnmarshalFrontMatter_ValidTOML(t *testing.T) {
+	source := []byte(`+++
+title = "Test Presentation"
+theme = "light"
+count = 100
++++`)
+
+	result, err := parser.UnmarshalFrontMatter[TestConfig](source)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "Test Presentation", result.Title)
+	assert.Equal(t, "light", result.Theme)
+	assert.Equal(t, 100, result.Count)
+}
