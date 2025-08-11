@@ -13,6 +13,7 @@ import (
 	"github.com/atotto/clipboard"
 	"github.com/c0rydoras/folien/internal/navigation"
 	"github.com/c0rydoras/folien/internal/preprocessor"
+	"github.com/c0rydoras/folien/pkg/parser"
 
 	"github.com/c0rydoras/folien/internal/code"
 	"github.com/c0rydoras/folien/internal/meta"
@@ -87,11 +88,13 @@ func (m *Model) Load() error {
 	}
 
 	content = strings.ReplaceAll(content, "\r", "")
+	metaData, exists := meta.New().Parse(content)
 
-	content = strings.TrimPrefix(content, strings.TrimPrefix(delimiter, "\n"))
+	if exists {
+		content = parser.RemoveFrontMatter(content)
+	}
 	folien := strings.Split(content, delimiter)
 
-	metaData, exists := meta.New().Parse(folien[0])
 	// If the user specifies a custom configuration options
 	// skip the first "slide" since this is all configuration
 	if exists && len(folien) > 1 {

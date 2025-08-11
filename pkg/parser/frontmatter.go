@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"regexp"
+
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
@@ -28,4 +30,14 @@ func UnmarshalFrontMatter[T any](source []byte) (T, error) {
 	}
 
 	return data, nil
+}
+
+var frontMatterRegex = regexp.MustCompile(`(?s)^([-+]{3})\n(.*?\n)([-+]{3})\n`)
+
+func RemoveFrontMatter(source string) string {
+	matches := frontMatterRegex.FindStringSubmatch(source)
+	if len(matches) == 4 && matches[1] == matches[3] {
+		return source[len(matches[0]):]
+	}
+	return source
 }

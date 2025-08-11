@@ -31,7 +31,7 @@ func New() *Meta {
 //
 // If no front matter is provided, it will fallback to the default theme and
 // return false to acknowledge that there is no front matter in this slide
-func (m *Meta) Parse(header string) (*Meta, bool) {
+func (m *Meta) Parse(presentation string) (*Meta, bool) {
 	fallback := &Meta{
 		Theme:  defaultTheme(),
 		Author: defaultAuthor(),
@@ -39,7 +39,7 @@ func (m *Meta) Parse(header string) (*Meta, bool) {
 		Paging: defaultPaging(),
 	}
 
-	tmp, err := parser.UnmarshalFrontMatter[Meta]([]byte(header))
+	tmp, err := parser.UnmarshalFrontMatter[Meta]([]byte(presentation))
 	if err != nil {
 		return fallback, false
 	}

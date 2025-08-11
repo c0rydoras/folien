@@ -53,3 +53,49 @@ count = 100
 	assert.Equal(t, "light", result.Theme)
 	assert.Equal(t, 100, result.Count)
 }
+
+func TestRemoveFrontMatter_WithFrontMatter(t *testing.T) {
+	source := `---
+title: "Test Presentation"
+theme: "dark"
+---
+
+# Main Content
+
+This is the actual content of the document.`
+
+	result := parser.RemoveFrontMatter(source)
+
+	assert.Contains(t, result, "# Main Content")
+	assert.Contains(t, result, "This is the actual content")
+	assert.NotContains(t, result, "title:")
+	assert.NotContains(t, result, "theme:")
+}
+
+func TestRemoveFrontMatter_WithFrontMatterTOML(t *testing.T) {
+	source := `+++
+title = 320
++++
+
+# Main Content
+
+This is the actual content of the document.`
+
+	result := parser.RemoveFrontMatter(source)
+
+	assert.Contains(t, result, "# Main Content")
+	assert.Contains(t, result, "This is the actual content")
+	assert.NotContains(t, result, "title:")
+	assert.NotContains(t, result, "theme:")
+}
+
+func TestRemoveFrontMatter_NoFrontMatter(t *testing.T) {
+	source := `# Just Content
+
+This document has no frontmatter, just regular markdown content.`
+
+	result := parser.RemoveFrontMatter(source)
+
+	assert.Contains(t, result, "# Just Content")
+	assert.Contains(t, result, "This document has no frontmatter")
+}

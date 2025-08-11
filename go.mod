@@ -1,8 +1,8 @@
 module github.com/c0rydoras/folien
 
-go 1.23.0
+go 1.23.2
 
-toolchain go1.24.5
+toolchain go1.24.6
 
 require (
 	github.com/atotto/clipboard v0.1.4
@@ -14,7 +14,6 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.9.0
 	github.com/yuin/goldmark v1.7.13
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -45,7 +44,7 @@ require (
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yuin/goldmark-emoji v1.0.5 // indirect
-	go.abhg.dev/goldmark/frontmatter v0.2.0 // indirect
+	go.abhg.dev/goldmark/frontmatter v0.2.0
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
