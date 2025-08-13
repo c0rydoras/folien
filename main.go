@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	_ "embed"
-	"log"
 	"os"
 	"time"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/c0rydoras/folien/internal/preprocessor"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/fang"
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
@@ -64,11 +64,11 @@ func root(cmd *cobra.Command, args []string) {
 	}
 	err = presentation.Load()
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
 	p := tea.NewProgram(presentation, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 }
