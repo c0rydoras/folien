@@ -13,6 +13,7 @@ import (
 	"github.com/c0rydoras/folien/internal/navigation"
 	"github.com/c0rydoras/folien/internal/preprocessor"
 	"github.com/c0rydoras/folien/pkg/parser"
+	"github.com/c0rydoras/folien/pkg/util"
 
 	"github.com/c0rydoras/folien/internal/code"
 	"github.com/c0rydoras/folien/internal/meta"
@@ -75,7 +76,7 @@ func (m *Model) Load() error {
 	var err error
 
 	if m.FileName != "" && m.FileName != "-" {
-		content, err = readFile(m.FileName)
+		content, err = util.ReadFile(m.FileName)
 	} else {
 		content, err = readStdin()
 	}
@@ -243,22 +244,6 @@ func (m *Model) paging() string {
 	default:
 		return m.Paging
 	}
-}
-
-func readFile(path string) (string, error) {
-	s, err := os.Stat(path)
-	if err != nil {
-		return "", errors.New("could not read file")
-	}
-	if s.IsDir() {
-		return "", errors.New("can not read directory")
-	}
-	b, err := os.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-
-	return string(b), err
 }
 
 func readStdin() (string, error) {
