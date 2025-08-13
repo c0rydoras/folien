@@ -41,7 +41,7 @@ func Parse(markdown string) ([]Block, error) {
 	for _, block := range codeBlocks {
 		rv = append(rv, Block{
 			Language: string(block.Language([]byte(markdown))),
-			Code:     string(block.Lines().Value([]byte(markdown))),
+			Code:     RemoveComments(string(block.Lines().Value([]byte(markdown)))),
 		})
 	}
 
