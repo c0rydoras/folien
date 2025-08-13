@@ -35,7 +35,7 @@ func init() {
 var cmd = &cobra.Command{
 	Use:               "folien <file.md>",
 	Short:             "Terminal based presentation tool",
-	Args:              cobra.ExactArgs(1),
+	Args:              cobra.RangeArgs(0, 1),
 	RunE:              root,
 	ValidArgsFunction: cobra.FixedCompletions(nil, cobra.ShellCompDirectiveDefault|cobra.ShellCompDirectiveFilterFileExt),
 }
@@ -48,6 +48,9 @@ func main() {
 
 func root(cmd *cobra.Command, args []string) error {
 	var err error
+	if len(args) != 1 {
+		return cmd.Help()
+	}
 	fileName := args[0]
 
 	preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
