@@ -33,10 +33,11 @@ func init() {
 }
 
 var cmd = &cobra.Command{
-	Use:   "folien <file.md>",
-	Short: "Terminal based presentation tool",
-	Args:  cobra.ExactArgs(1),
-	RunE:  root,
+	Use:               "folien <file.md>",
+	Short:             "Terminal based presentation tool",
+	Args:              cobra.ExactArgs(1),
+	RunE:              root,
+	ValidArgsFunction: cobra.FixedCompletions(nil, cobra.ShellCompDirectiveDefault|cobra.ShellCompDirectiveFilterFileExt),
 }
 
 func main() {
