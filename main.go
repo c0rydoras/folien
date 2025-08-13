@@ -11,7 +11,6 @@ import (
 	"github.com/c0rydoras/folien/internal/preprocessor"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/fang"
-	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
@@ -37,7 +36,7 @@ var cmd = &cobra.Command{
 	Use:   "folien <file.md>",
 	Short: "Terminal based presentation tool",
 	Args:  cobra.ExactArgs(1),
-	Run:   root,
+	RunE:  root,
 }
 
 func main() {
@@ -46,7 +45,7 @@ func main() {
 	}
 }
 
-func root(cmd *cobra.Command, args []string) {
+func root(cmd *cobra.Command, args []string) error {
 	var err error
 	fileName := args[0]
 
@@ -64,11 +63,12 @@ func root(cmd *cobra.Command, args []string) {
 	}
 	err = presentation.Load()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	p := tea.NewProgram(presentation, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
