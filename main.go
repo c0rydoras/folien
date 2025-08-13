@@ -33,14 +33,10 @@ func init() {
 var cmd = &cobra.Command{
 	Use:   "folien <file.md>",
 	Short: "Terminal based presentation tool",
-	Args:  cobra.ArbitraryArgs,
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
-		var fileName string
-
-		if len(args) > 0 {
-			fileName = args[0]
-		}
+		fileName := args[0]
 
 		preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
 		if enableHeadings {

@@ -2,7 +2,6 @@ package model
 
 import (
 	"bufio"
-	_ "embed"
 	"errors"
 	"fmt"
 	"io"
@@ -24,9 +23,7 @@ import (
 )
 
 var (
-	//go:embed tutorial.md
-	folienTutorial []byte
-	tabSpaces      = strings.Repeat(" ", 4)
+	tabSpaces = strings.Repeat(" ", 4)
 )
 
 const (
@@ -271,7 +268,7 @@ func readStdin() (string, error) {
 	}
 
 	if stat.Mode()&os.ModeNamedPipe == 0 && stat.Size() == 0 {
-		return string(folienTutorial), nil
+		return "", errors.New("no input provided")
 	}
 
 	reader := bufio.NewReader(os.Stdin)
