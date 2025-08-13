@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"log"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"github.com/c0rydoras/folien/internal/navigation"
 	"github.com/c0rydoras/folien/internal/preprocessor"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/fang"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +41,7 @@ var cmd = &cobra.Command{
 }
 
 func main() {
-	if err := cmd.Execute(); err != nil {
+	if err := fang.Execute(context.Background(), cmd); err != nil {
 		os.Exit(1)
 	}
 }
