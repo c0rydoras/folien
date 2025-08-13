@@ -21,27 +21,30 @@ var (
 )
 
 func init() {
-	cmd.Flags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
+	rootCmd.Flags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
 
-	cmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
-	tocFlag := cmd.Flag("toc")
+	rootCmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
+	tocFlag := rootCmd.Flag("toc")
 	tocFlag.NoOptDefVal = "Table of Contents"
 
-	cmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
-	tocDescFlag := cmd.Flag("toc-description")
+	rootCmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
+	tocDescFlag := rootCmd.Flag("toc-description")
 	tocDescFlag.NoOptDefVal = "Table of Contents Description"
 }
 
-var cmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:               "folien <file.md>",
 	Short:             "Terminal based presentation tool",
 	Args:              cobra.RangeArgs(0, 1),
 	RunE:              root,
 	ValidArgsFunction: cobra.FixedCompletions(nil, cobra.ShellCompDirectiveDefault|cobra.ShellCompDirectiveFilterFileExt),
+	CompletionOptions: cobra.CompletionOptions{
+		HiddenDefaultCmd: true,
+	},
 }
 
 func main() {
-	if err := fang.Execute(context.Background(), cmd); err != nil {
+	if err := fang.Execute(context.Background(), rootCmd); err != nil {
 		os.Exit(1)
 	}
 }
