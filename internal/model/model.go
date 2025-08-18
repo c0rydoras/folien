@@ -93,12 +93,6 @@ func (m *Model) Load() error {
 	}
 	folien := strings.Split(content, delimiter)
 
-	// If the user specifies a custom configuration options
-	// skip the first "slide" since this is all configuration
-	if exists && len(folien) > 1 {
-		folien = folien[1:]
-	}
-
 	m.Slides = folien
 
 	if m.Preprocessor != nil {
