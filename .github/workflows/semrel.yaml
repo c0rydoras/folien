@@ -1,0 +1,34 @@
+---
+name: Semantic Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  semrel:
+    permissions:
+      actions: none
+      checks: none
+      contents: write
+      deployments: none
+      issues: none
+      packages: none
+      pull-requests: none
+      repository-projects: none
+      security-events: none
+      statuses: none
+      id-token: none
+
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Semantic Release
+        uses: go-semantic-release/action@v1
+        id: semrel
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-initial-development-versions: true
