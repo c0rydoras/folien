@@ -8,7 +8,7 @@ require (
 	github.com/atotto/clipboard v0.1.4
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
-	github.com/charmbracelet/fang v0.3.0
+	github.com/charmbracelet/fang v0.4.0
 	github.com/charmbracelet/glamour v0.10.0
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250404203927-76690c660834
 	github.com/muesli/termenv v0.16.0
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.2 // indirect
+	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3 // indirect
 	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250603201427-c31516f43444 // indirect
 	github.com/muesli/mango v0.1.0 // indirect
 	github.com/muesli/mango-cobra v1.2.0 // indirect
