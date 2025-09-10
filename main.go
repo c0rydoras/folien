@@ -62,11 +62,12 @@ func root(cmd *cobra.Command, args []string) error {
 	}
 
 	presentation := model.Model{
-		Page:         0,
-		Date:         time.Now().Format("2006-01-02"),
-		FileName:     fileName,
-		Search:       navigation.NewSearch(),
-		Preprocessor: preprocessorConfig,
+		Page:               0,
+		Date:               time.Now().Format("2006-01-02"),
+		FileName:           fileName,
+		Search:             navigation.NewSearch(),
+		Preprocessor:       preprocessorConfig,
+		HideInternalErrors: model.AllButLast,
 	}
 	err = presentation.Load()
 	if err != nil {

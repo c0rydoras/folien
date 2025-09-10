@@ -31,6 +31,17 @@ const (
 	delimiter = "\n---\n"
 )
 
+type HideInternalError int
+
+const (
+	// Hide All Internal Errors
+	All HideInternalError = iota
+	// Hide all Internal Errors except for the last one (on the current slide)
+	AllButLast
+	// Don't hide any Internal Errors
+	None
+)
+
 // Model represents the model of this presentation, which contains all the
 // state related to the current folien.
 type Model struct {
@@ -48,6 +59,8 @@ type Model struct {
 	VirtualText  string
 	Search       navigation.Search
 	Preprocessor *preprocessor.Config
+	// TODO: move into some proper config struct
+	HideInternalErrors HideInternalError
 }
 
 type fileWatchMsg struct{}
@@ -161,8 +174,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			var outs []string
-			for _, block := range blocks {
+			for i, block := range blocks {
 				res := code.Execute(block)
+				if res.ExitCode == code.ExitCodeInternalError {
+					if m.HideInternalErrors == All {
+						continue
+					}
+					if m.HideInternalErrors == AllButLast && i != len(blocks)-1 {
+						continue
+					}
+				}
 				outs = append(outs, res.Out)
 			}
 			m.VirtualText = strings.Join(outs, "\n")
