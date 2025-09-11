@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -61,6 +62,7 @@ type Model struct {
 	Preprocessor *preprocessor.Config
 	// TODO: move into some proper config struct
 	HideInternalErrors HideInternalError
+	ready              bool
 }
 
 type fileWatchMsg struct{}
@@ -119,15 +121,30 @@ func (m *Model) Load() error {
 		m.Theme = styles.SelectTheme(metaData.Theme)
 	}
 
+	m.updateViewportContent()
+
 	return nil
 }
 
 // Update updates the presentation model.
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var (
+		cmd  tea.Cmd
+		cmds []tea.Cmd
+	)
+
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.viewport.Width = msg.Width
-		m.viewport.Height = msg.Height
+		footerHeight := 3
+		if !m.ready {
+			m.viewport = viewport.New(msg.Width, msg.Height-footerHeight)
+			m.viewport.YPosition = 0
+			m.ready = true
+			m.updateViewportContent()
+		} else {
+			m.viewport.Width = msg.Width
+			m.viewport.Height = msg.Height - footerHeight
+		}
 		return m, nil
 
 	case tea.KeyMsg:
@@ -171,6 +188,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if err != nil {
 				// We couldn't parse the code block on the screen
 				m.VirtualText = "\n" + err.Error()
+				m.updateViewportContent()
 				return m, nil
 			}
 			var outs []string
@@ -187,6 +205,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				outs = append(outs, res.Out)
 			}
 			m.VirtualText = strings.Join(outs, "\n")
+			m.updateViewportContent()
 		case "y":
 			blocks, err := code.Parse(m.Slides[m.Page])
 			if err != nil {
@@ -199,13 +218,39 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return m, tea.Quit
 		default:
+			if m.shouldHandleViewportNavigation(keyPress) {
+				if keyPress == "j" || keyPress == "k" {
+					repeat := 1
+					if m.bufferIsNumeric() {
+						if r, err := strconv.Atoi(m.buffer); err == nil && r > 0 {
+							repeat = r
+						}
+						m.buffer = ""
+					}
+
+					for i := 0; i < repeat; i++ {
+						m.viewport, cmd = m.viewport.Update(msg)
+						cmds = append(cmds, cmd)
+					}
+					return m, tea.Batch(cmds...)
+				} else {
+					m.viewport, cmd = m.viewport.Update(msg)
+					cmds = append(cmds, cmd)
+					return m, tea.Batch(cmds...)
+				}
+			}
+
 			newState := navigation.Navigate(navigation.State{
 				Buffer:      m.buffer,
 				Page:        m.Page,
 				TotalSlides: len(m.Slides),
 			}, keyPress)
 			m.buffer = newState.Buffer
-			m.SetPage(newState.Page)
+			if newState.Page != m.Page {
+				m.SetPage(newState.Page)
+				m.updateViewportContent()
+				m.viewport.GotoTop()
+			}
 		}
 
 	case fileWatchMsg:
@@ -216,25 +261,27 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.Page >= len(m.Slides) {
 				m.Page = len(m.Slides) - 1
 			}
+			m.updateViewportContent()
 		}
 		return m, fileWatchCmd()
 	}
-	return m, nil
+
+	if !m.Search.Active {
+		m.viewport, cmd = m.viewport.Update(msg)
+		cmds = append(cmds, cmd)
+	}
+
+	return m, tea.Batch(cmds...)
 }
 
 // View renders the current slide in the presentation and the status bar which
 // contains the author, date, and pagination information.
 func (m Model) View() string {
-	r, _ := glamour.NewTermRenderer(m.Theme, glamour.WithWordWrap(m.viewport.Width))
-	slide := m.Slides[m.Page]
-	slide = code.HideComments(slide)
-	slide, err := r.Render(slide)
-	slide = strings.ReplaceAll(slide, "\t", tabSpaces)
-	slide += m.VirtualText
-	if err != nil {
-		slide = fmt.Sprintf("Error: Could not render markdown! (%v)", err)
+	if !m.ready {
+		return "\n  Initializing..."
 	}
-	slide = styles.Slide.Render(slide)
+
+	slide := styles.Slide.Render(m.viewport.View())
 
 	var left string
 	if m.Search.Active {
@@ -247,7 +294,61 @@ func (m Model) View() string {
 
 	right := styles.Page.Render(m.paging())
 	status := styles.Status.Render(styles.JoinHorizontal(left, right, m.viewport.Width))
-	return styles.JoinVertical(slide, status, m.viewport.Height)
+
+	return fmt.Sprintf("%s\n%s", slide, status)
+}
+
+func (m *Model) shouldHandleViewportNavigation(keyPress string) bool {
+	scrollKeys := map[string]bool{
+		"up":     true,
+		"down":   true,
+		"pgup":   true,
+		"pgdown": true,
+		"home":   true,
+		"end":    true,
+		"ctrl+u": true,
+		"ctrl+d": true,
+		"ctrl+b": true,
+		"ctrl+f": true,
+	}
+
+	if keyPress == "j" || keyPress == "k" {
+		return true
+	}
+
+	return scrollKeys[keyPress]
+}
+
+func (m *Model) updateViewportContent() {
+	if !m.ready || len(m.Slides) == 0 {
+		return
+	}
+
+	r, _ := glamour.NewTermRenderer(m.Theme, glamour.WithWordWrap(m.viewport.Width))
+	slide := m.Slides[m.Page]
+	slide = code.HideComments(slide)
+	slide, err := r.Render(slide)
+	slide = strings.ReplaceAll(slide, "\t", tabSpaces)
+	slide += m.VirtualText
+	if err != nil {
+		slide = fmt.Sprintf("Error: Could not render markdown! (%v)", err)
+	}
+
+	slide = "\n\n" + slide
+
+	m.viewport.SetContent(slide)
+}
+
+func (m *Model) bufferIsNumeric() bool {
+	if m.buffer == "" {
+		return false
+	}
+	for _, r := range m.buffer {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 func (m *Model) paging() string {
@@ -301,6 +402,7 @@ func (m *Model) SetPage(page int) {
 
 	m.VirtualText = ""
 	m.Page = page
+	m.updateViewportContent()
 }
 
 // Pages returns all the folien in the presentation.

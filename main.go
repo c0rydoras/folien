@@ -74,7 +74,11 @@ func root(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	p := tea.NewProgram(presentation, tea.WithAltScreen())
+	p := tea.NewProgram(
+		presentation,
+		tea.WithAltScreen(),
+		tea.WithMouseCellMotion(),
+	)
 	if _, err := p.Run(); err != nil {
 		return err
 	}
