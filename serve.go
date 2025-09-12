@@ -14,11 +14,9 @@ import (
 )
 
 var (
-	host     string
-	port     int
-	keyPath  string
-	err      error
-	fileName string
+	host    string
+	port    int
+	keyPath string
 )
 
 // serveCmd is the command for serving the presentation. It starts the slides

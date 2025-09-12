@@ -86,7 +86,7 @@ func newModel(fileName string) (model.Model, error) {
 		Preprocessor:       preprocessorConfig,
 		HideInternalErrors: model.AllButLast,
 	}
-	err = presentation.Load()
+	err := presentation.Load()
 	if err != nil {
 		return model.Model{}, err
 	}
