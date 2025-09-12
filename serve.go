@@ -14,9 +14,10 @@ import (
 )
 
 var (
-	host    string
-	port    int
-	keyPath string
+	host               string
+	port               int
+	keyPath            string
+	allowCodeExecution bool
 )
 
 // serveCmd is the command for serving the presentation. It starts the slides
@@ -44,7 +45,7 @@ var serveCmd = &cobra.Command{
 			port, _ = strconv.Atoi(p)
 		}
 
-		presentation, err := newModel(args[0])
+		presentation, err := newModel(args[0], allowCodeExecution)
 		if err != nil {
 			return err
 		}
@@ -78,4 +79,5 @@ func init() {
 	serveCmd.Flags().StringVar(&keyPath, "keyPath", "folien", "Server private key path")
 	serveCmd.Flags().StringVar(&host, "host", "localhost", "Server host to bind to")
 	serveCmd.Flags().IntVar(&port, "port", 53531, "Server port to bind to")
+	serveCmd.Flags().BoolVar(&allowCodeExecution, "allow-code-execution", false, "Allow code execution in the server (WARNING: be careful what code you include in your folien)")
 }

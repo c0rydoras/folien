@@ -62,6 +62,7 @@ type Model struct {
 	Preprocessor *preprocessor.Config
 	// TODO: move into some proper config struct
 	HideInternalErrors HideInternalError
+	AllowCodeExecution bool
 	ready              bool
 }
 
@@ -183,6 +184,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// Go to next occurrence
 			m.Search.Execute(&m)
 		case "ctrl+e":
+			if !m.AllowCodeExecution {
+				return m, nil
+			}
+
 			// Run code blocks
 			blocks, err := code.Parse(m.Slides[m.Page])
 			if err != nil {

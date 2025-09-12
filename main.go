@@ -56,7 +56,7 @@ func root(cmd *cobra.Command, args []string) error {
 		return cmd.Help()
 	}
 
-	presentation, err := newModel(args[0])
+	presentation, err := newModel(args[0], true)
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func root(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func newModel(fileName string) (model.Model, error) {
+func newModel(fileName string, allowCodeExecution bool) (model.Model, error) {
 	preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
 	if enableHeadings {
 		preprocessorConfig = preprocessorConfig.WithHeadings()
@@ -85,6 +85,7 @@ func newModel(fileName string) (model.Model, error) {
 		Search:             navigation.NewSearch(),
 		Preprocessor:       preprocessorConfig,
 		HideInternalErrors: model.AllButLast,
+		AllowCodeExecution: allowCodeExecution,
 	}
 	err := presentation.Load()
 	if err != nil {
