@@ -62,6 +62,7 @@ type Model struct {
 	Preprocessor *preprocessor.Config
 	// TODO: move into some proper config struct
 	HideInternalErrors HideInternalError
+	AllowExecution     bool
 	ready              bool
 }
 
@@ -188,6 +189,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if err != nil {
 				// We couldn't parse the code block on the screen
 				m.VirtualText = "\n" + err.Error()
+				m.updateViewportContent()
+				return m, nil
+			}
+			if !m.AllowExecution {
+				m.VirtualText = "\n Execution is disabled"
 				m.updateViewportContent()
 				return m, nil
 			}

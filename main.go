@@ -18,10 +18,12 @@ var (
 	tocTitle       string
 	tocDescription string
 	enableHeadings bool
+	allowExecution bool
 )
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
+	rootCmd.PersistentFlags().BoolVarP(&allowExecution, "allow-execution", "A", false, "Allow executing code blocks")
 
 	rootCmd.PersistentFlags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
 	tocFlag := rootCmd.Flag("toc")
@@ -85,6 +87,7 @@ func newModel(fileName string) (model.Model, error) {
 		Search:             navigation.NewSearch(),
 		Preprocessor:       preprocessorConfig,
 		HideInternalErrors: model.AllButLast,
+		AllowExecution:     allowExecution,
 	}
 	err := presentation.Load()
 	if err != nil {
