@@ -24,7 +24,7 @@ var (
 var serveCmd = &cobra.Command{
 	Use:     "serve <file.md>",
 	Aliases: []string{"server"},
-	Short:   "Start an SSH server to run folien",
+	Short:   "Start an SSH server to run folien (NOTE: ctrl+e will still execute commands on the host!)",
 	Args:    cobra.RangeArgs(0, 1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
