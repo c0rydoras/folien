@@ -21,15 +21,17 @@ var (
 )
 
 func init() {
-	rootCmd.Flags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
+	rootCmd.PersistentFlags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
 
-	rootCmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
+	rootCmd.PersistentFlags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
 	tocFlag := rootCmd.Flag("toc")
 	tocFlag.NoOptDefVal = "Table of Contents"
 
-	rootCmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
+	rootCmd.PersistentFlags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
 	tocDescFlag := rootCmd.Flag("toc-description")
 	tocDescFlag.NoOptDefVal = "Table of Contents Description"
+
+	rootCmd.AddCommand(serveCmd)
 }
 
 var rootCmd = &cobra.Command{
@@ -50,26 +52,11 @@ func main() {
 }
 
 func root(cmd *cobra.Command, args []string) error {
-	var err error
 	if len(args) != 1 {
 		return cmd.Help()
 	}
-	fileName := args[0]
 
-	preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
-	if enableHeadings {
-		preprocessorConfig = preprocessorConfig.WithHeadings()
-	}
-
-	presentation := model.Model{
-		Page:               0,
-		Date:               time.Now().Format("2006-01-02"),
-		FileName:           fileName,
-		Search:             navigation.NewSearch(),
-		Preprocessor:       preprocessorConfig,
-		HideInternalErrors: model.AllButLast,
-	}
-	err = presentation.Load()
+	presentation, err := newModel(args[0])
 	if err != nil {
 		return err
 	}
@@ -83,4 +70,25 @@ func root(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	return nil
+}
+
+func newModel(fileName string) (model.Model, error) {
+	preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
+	if enableHeadings {
+		preprocessorConfig = preprocessorConfig.WithHeadings()
+	}
+
+	presentation := model.Model{
+		Page:               0,
+		Date:               time.Now().Format("2006-01-02"),
+		FileName:           fileName,
+		Search:             navigation.NewSearch(),
+		Preprocessor:       preprocessorConfig,
+		HideInternalErrors: model.AllButLast,
+	}
+	err := presentation.Load()
+	if err != nil {
+		return model.Model{}, err
+	}
+	return presentation, nil
 }
