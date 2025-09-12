@@ -21,13 +21,13 @@ var (
 )
 
 func init() {
-	rootCmd.Flags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
+	rootCmd.PersistentFlags().BoolVarP(&enableHeadings, "headings", "a", false, "Enable automatic heading addition")
 
-	rootCmd.Flags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
+	rootCmd.PersistentFlags().StringVarP(&tocTitle, "toc", "t", "", "Enable table of contents generation with optional title (default: 'Table of Contents')")
 	tocFlag := rootCmd.Flag("toc")
 	tocFlag.NoOptDefVal = "Table of Contents"
 
-	rootCmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
+	rootCmd.PersistentFlags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
 	tocDescFlag := rootCmd.Flag("toc-description")
 	tocDescFlag.NoOptDefVal = "Table of Contents Description"
 

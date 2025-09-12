@@ -11,6 +11,7 @@ import (
 
 	"github.com/c0rydoras/folien/internal/model"
 	"github.com/c0rydoras/folien/internal/navigation"
+	"github.com/c0rydoras/folien/internal/preprocessor"
 	"github.com/c0rydoras/folien/internal/server"
 	"github.com/spf13/cobra"
 )
@@ -48,11 +49,17 @@ var serveCmd = &cobra.Command{
 			fileName = args[0]
 		}
 
+		preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
+		if enableHeadings {
+			preprocessorConfig = preprocessorConfig.WithHeadings()
+		}
+
 		presentation := model.Model{
-			Page:     0,
-			Date:     time.Now().Format("2006-01-02"),
-			FileName: fileName,
-			Search:   navigation.NewSearch(),
+			Page:         0,
+			Date:         time.Now().Format("2006-01-02"),
+			FileName:     fileName,
+			Search:       navigation.NewSearch(),
+			Preprocessor: preprocessorConfig,
 		}
 		err = presentation.Load()
 		if err != nil {
