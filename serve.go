@@ -9,9 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/c0rydoras/folien/internal/model"
-	"github.com/c0rydoras/folien/internal/navigation"
-	"github.com/c0rydoras/folien/internal/preprocessor"
 	"github.com/c0rydoras/folien/internal/server"
 	"github.com/spf13/cobra"
 )
@@ -30,8 +27,12 @@ var serveCmd = &cobra.Command{
 	Use:     "serve <file.md>",
 	Aliases: []string{"server"},
 	Short:   "Start an SSH server to run folien",
-	Args:    cobra.ArbitraryArgs,
+	Args:    cobra.RangeArgs(0, 1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) != 1 {
+			return cmd.Help()
+		}
+
 		k := os.Getenv("FOLIEN_SERVER_KEY_PATH")
 		if k != "" {
 			keyPath = k
@@ -45,23 +46,7 @@ var serveCmd = &cobra.Command{
 			port, _ = strconv.Atoi(p)
 		}
 
-		if len(args) > 0 {
-			fileName = args[0]
-		}
-
-		preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
-		if enableHeadings {
-			preprocessorConfig = preprocessorConfig.WithHeadings()
-		}
-
-		presentation := model.Model{
-			Page:         0,
-			Date:         time.Now().Format("2006-01-02"),
-			FileName:     fileName,
-			Search:       navigation.NewSearch(),
-			Preprocessor: preprocessorConfig,
-		}
-		err = presentation.Load()
+		presentation, err := newModel(args[0])
 		if err != nil {
 			return err
 		}

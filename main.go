@@ -52,12 +52,27 @@ func main() {
 }
 
 func root(cmd *cobra.Command, args []string) error {
-	var err error
 	if len(args) != 1 {
 		return cmd.Help()
 	}
-	fileName := args[0]
 
+	presentation, err := newModel(args[0])
+	if err != nil {
+		return err
+	}
+
+	p := tea.NewProgram(
+		presentation,
+		tea.WithAltScreen(),
+		tea.WithMouseCellMotion(),
+	)
+	if _, err := p.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func newModel(fileName string) (model.Model, error) {
 	preprocessorConfig := preprocessor.NewConfig().WithTOC(tocTitle, tocDescription)
 	if enableHeadings {
 		preprocessorConfig = preprocessorConfig.WithHeadings()
@@ -73,16 +88,7 @@ func root(cmd *cobra.Command, args []string) error {
 	}
 	err = presentation.Load()
 	if err != nil {
-		return err
+		return model.Model{}, err
 	}
-
-	p := tea.NewProgram(
-		presentation,
-		tea.WithAltScreen(),
-		tea.WithMouseCellMotion(),
-	)
-	if _, err := p.Run(); err != nil {
-		return err
-	}
-	return nil
+	return presentation, nil
 }
