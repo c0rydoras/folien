@@ -30,6 +30,8 @@ func init() {
 	rootCmd.Flags().StringVarP(&tocDescription, "toc-description", "d", "", "Enable table of contents generation with optional description")
 	tocDescFlag := rootCmd.Flag("toc-description")
 	tocDescFlag.NoOptDefVal = "Table of Contents Description"
+
+	rootCmd.AddCommand(serveCmd)
 }
 
 var rootCmd = &cobra.Command{
