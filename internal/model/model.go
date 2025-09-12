@@ -193,7 +193,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			if !m.AllowExecution {
-				m.VirtualText = "\n Execution is disabled"
+				m.VirtualText = "\nExecution is disabled"
 				m.updateViewportContent()
 				return m, nil
 			}
